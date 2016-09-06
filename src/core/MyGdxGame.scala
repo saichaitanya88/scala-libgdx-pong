@@ -28,6 +28,7 @@ class MyGdxGame extends ApplicationAdapter{
   private var bFont: BitmapFont = null
   private var spriteBatch: SpriteBatch = null
 
+  def isGameOver = Math.max(score1,score2) >= 2
 	
 	override def create () { 
     spriteBatch = new SpriteBatch
@@ -41,9 +42,11 @@ class MyGdxGame extends ApplicationAdapter{
 	}
 
 	override def render () {
-	  ball.update()
-	  paddle1.update()
-	  paddle2.update()
+	  if(!isGameOver){
+  	  ball.update()
+  	  paddle1.update()
+  	  paddle2.update()
+	  }
 	  if (ball.ellipse.y < 0){
 	    score1 += 1
 	    ball.reset()
@@ -59,6 +62,18 @@ class MyGdxGame extends ApplicationAdapter{
 	  
 		Gdx.gl.glClearColor(0, 0, 0, 1)
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+		
+		if(isGameOver){
+	    spriteBatch.begin()
+	    val textY = 150 + Gdx.graphics.getHeight/2
+	    val textX = Gdx.graphics.getWidth/2
+  		bFont.draw(spriteBatch, s"Game Over", textX, textY)
+  		val player = if (score1 > score2) "Player 1" else "Player 2"
+  		bFont.draw(spriteBatch, s"${player} wins!", textX, -20 + textY)
+  		bFont.draw(spriteBatch, s"Press ENTER to restart", textX, -40 + textY)
+  		spriteBatch.end()
+	  }
+		
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line)
 		wall1.draw(shapeRenderer)
 		wall2.draw(shapeRenderer)
@@ -76,6 +91,10 @@ class MyGdxGame extends ApplicationAdapter{
 		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
 		  Gdx.app.exit()
+		}
+		if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && isGameOver){
+		  score1 = 0
+		  score1 = 0
 		}
 	}
 	

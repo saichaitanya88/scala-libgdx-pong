@@ -9,6 +9,7 @@ object DesktopLauncher {
     val config = new LwjglApplicationConfiguration();
     config.foregroundFPS = 60;
     config.backgroundFPS = 60;
+    config.title = "Ultra Simple Pong"
     new LwjglApplication(new MyGdxGame(), config);
   }
 }
